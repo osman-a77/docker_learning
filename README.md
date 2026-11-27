@@ -217,11 +217,7 @@ Then open:
 - `/` for the landing page and visitor ticket
 - `/count` for the total visit count
 
-<!-- SCREENSHOT: docker compose up --build output showing all three containers starting -->
-![Challenge compose up](docs/screenshots/05-challenge-compose-up.png)
 
-<!-- SCREENSHOT: docker compose ps showing all containers as "Up" -->
-![Running containers](docs/screenshots/06-docker-ps.png)
 
 **Home page:** the visitor ticket shows visit number 30.
 
@@ -231,8 +227,7 @@ Then open:
 
 ![Count page](docs/screenshots/08-count-page.png)
 
-<!-- SCREENSHOT (optional): `docker compose exec redis redis-cli GET visit_count` -->
-![Value in Redis](docs/screenshots/10-redis-cli.png)
+
 
 ---
 
