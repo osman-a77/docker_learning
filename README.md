@@ -15,8 +15,7 @@ I ran everything inside an **Ubuntu virtual machine using UTM on my Mac**, so th
 6. [Notes and debugging steps](#notes-and-debugging-steps)
 7. [What I learnt](#what-i-learnt)
 8. [Challenges and how I solved them](#challenges-and-how-i-solved-them)
-9. [What I'd like to do next](#what-id-like-to-do-next)
-10. [Repository structure](#repository-structure)
+9. [Repository structure](#repository-structure)
 
 ---
 
@@ -322,37 +321,17 @@ curl -I http://localhost:5000
 **1. Flask couldn't reach the database or Redis.**
 I first used the wrong hostname. I fixed it by using the Compose service name (`mydb` or `redis`) instead of `localhost`, then confirmed it with a `ping` from inside the web container.
 
-**2. The app started before the database was ready.**
-`depends_on` only waits for the container to start. I solved it by retrying after a short wait, and the Redis app handles connection errors so it doesn't crash if the service isn't ready yet.
-
-**3. Getting nginx to talk to Flask.**
-nginx and Flask are separate containers, so nginx can't use `localhost` to find the app. I pointed the `upstream` block at `web:5000`, using the Compose service name. The name and port have to match exactly, otherwise nginx returns a 502 error. I used `docker compose logs nginx web` to see which side was failing.
-
-**4. Making the ports line up.**
+**2. Making the ports line up.**
 At one point my `nginx.conf` used port 5002 while Flask listened on 5000, which meant nginx couldn't reach the app. I changed the upstream and `listen` ports to 5000 so everything agreed.
 
-**5. Code changes didn't appear.**
+**3. Code changes didn't appear.**
 Docker was reusing a cached image. Running `docker compose up --build` forced a rebuild.
 
-**6. Reaching the site from my Mac.**
-Because Docker was running inside a UTM virtual machine, `localhost` on my Mac didn't point at the containers. I opened the site from a browser inside the VM instead.
-
-**7. The `/` and `/count` pages looked inconsistent.**
+**4. The `/` and `/count` pages looked inconsistent.**
 They started as separate pages with different markup. I refactored them into one shared template and a helper function, so the styling and the Redis logic each live in one place.
-
-**8. Deciding what the counter should count.**
-Both `/` and `/count` increment the counter, so visiting both counts twice. I kept the original behaviour for `/count`, and noted that switching to `r.get` would make it a read-only view.
 
 ---
 
-## What I'd like to do next
-
-- Add a **healthcheck** to Redis so Flask only starts when Redis is truly ready.
-- Mount a **volume** for Redis so the count survives restarts.
-- Move configuration into a **`.env` file** and stop hard-coding secrets.
-- Run the Flask app with a production server such as **Gunicorn** instead of the development server.
-- Add `proxy_set_header` lines to `nginx.conf` (such as `Host` and `X-Real-IP`) so Flask sees the real visitor details instead of nginx's.
-- Set up a simple **CI/CD pipeline** (for example GitHub Actions) to build and test the images automatically.
 
 ---
 
