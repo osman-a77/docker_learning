@@ -27,10 +27,6 @@ I ran everything inside an **Ubuntu virtual machine using UTM on my Mac**, so th
 - **Guest OS:** Ubuntu <!-- TODO: add version, e.g. 24.04 -->
 - **Tools:** Docker and Docker Compose, installed inside the Ubuntu VM <!-- TODO: add versions from `docker --version` and `docker compose version` -->
 
-<!-- SCREENSHOT: Ubuntu running in UTM, ideally with `docker --version` and `docker compose version` visible in the terminal -->
-![Ubuntu VM in UTM with Docker versions](docs/screenshots/00-environment.png)
-
-Running Docker inside a VM added a few things I had to think about, like networking between the Mac and the VM and the CPU architecture. I've noted these in the debugging section.
 
 ---
 
