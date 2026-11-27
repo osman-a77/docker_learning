@@ -188,8 +188,7 @@ nginx and Flask both use port 5000, but they are separate containers with their 
 
 The reason for putting nginx in front is that this is how many real deployments work. nginx is built to handle incoming connections, while Flask's built-in server is only meant for development.
 
-<!-- SCREENSHOT (optional): nginx.conf open in an editor or terminal -->
-![nginx configuration](docs/screenshots/09-nginx-conf.png)
+
 
 ### Docker Compose
 
