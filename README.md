@@ -258,29 +258,6 @@ curl -I http://localhost:5000
 `Server: nginx/...` means the request went through the proxy. `Server: Werkzeug/...` means it reached Flask directly.
 <!-- TODO: run this and keep only the line that matches what you see. If it shows Werkzeug, make nginx the only service that publishes a port in docker-compose.yml, then re-test. -->
 
-**What I check when it doesn't work**
-
-| Symptom | Likely cause | What to check or do |
-| --- | --- | --- |
-| `Connection refused` to Redis | Redis isn't running yet, or the wrong host is set | `docker compose ps`; confirm `REDIS_HOST` matches the service name |
-| `Name or service not known` | Containers aren't on the same Compose network | Make sure all services are in the same `docker-compose.yml` |
-| `localhost` doesn't work for Redis | Inside a container, `localhost` means that container itself | Use the service name instead |
-| **502 Bad Gateway** from nginx | nginx can't reach Flask. The `server web:5000` line in `nginx.conf` must match the Flask service name and the port Flask listens on | `docker compose logs nginx web`; check the port in `nginx.conf` against `hello.py` |
-| nginx container exits immediately | Syntax error in `nginx.conf` | Read the nginx logs; run `nginx -t` |
-| Port already allocated | nginx and Flask both publish host port 5000 | Only the nginx service should publish a port; Flask is reached over the Compose network |
-| Flask works directly but not through nginx | Flask must listen on `0.0.0.0`, not just `127.0.0.1` | Check `app.run(host='0.0.0.0', ...)` |
-| Page loads but the count shows `?` | Flask is up but Redis isn't reachable | Check the Redis logs and connection settings |
-| Code changes don't show up | The image is cached | `docker compose up --build` |
-| Site works in the VM but not from my Mac's browser | VM networking | Use the VM's IP address (`ip a` in Ubuntu) instead of `localhost`, and check UTM's network mode |
-| `exec format error` or platform warnings | CPU architecture mismatch (ARM vs x86) | Check `uname -m` and prefer images that support `arm64` |
-| `my-flask-app:multistage` not found (intro) | Compose uses a pre-built image, not a build step | Run `docker build -t my-flask-app:multistage .` first |
-| MySQL `Can't connect` on first start (intro) | MySQL takes a few seconds to initialise, and `depends_on` only waits for the container to *start* | Wait and refresh, or add a healthcheck |
-
-<!-- TODO: keep this note only if you hit this issue, otherwise delete it -->
-**Packages missing from the multi-stage image (intro task).** `pip install` puts packages in `site-packages`, but the production stage only copies `/app` from the build stage, so Flask and `mysqlclient` don't make it across. The fix is to install with `pip install --prefix=/install ...` in the build stage and then `COPY --from=build /install /usr/local` in the final stage. The final stage also needs the `libmariadb3` runtime library for `mysqlclient` to load.
-
-<!-- Add your own notes here: the exact error you saw, what you tried, and what finally worked -->
-
 ---
 
 ## What I learnt
