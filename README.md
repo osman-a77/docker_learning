@@ -305,8 +305,6 @@ curl -I http://localhost:5000
 - **What a reverse proxy does:** nginx receives the traffic and forwards it, so the app doesn't have to face the outside world directly.
 - **Containers have their own network space.** nginx and Flask can both use port 5000 without a clash, as long as only one of them publishes that port to the host.
 - **Environment variables** let the same code run in different places without editing it.
-- **Why Redis suits a counter:** `INCR` is atomic, so concurrent visitors can't overwrite each other.
-- **Failing gracefully:** catching Redis errors means a backend problem shows a polite message instead of a stack trace.
 - **Logs first:** `docker compose logs` answered most of my questions faster than guessing.
 - **Working in a Linux VM:** using Ubuntu in UTM gave me practice with the terminal, package installation and VM networking.
 
