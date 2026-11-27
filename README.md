@@ -242,24 +242,10 @@ docker compose logs -f web
 docker compose logs -f redis
 docker compose logs -f nginx
 
-# Check the counter directly in Redis
-docker compose exec redis redis-cli GET visit_count
-
-# Test that Flask can reach Redis by name
-docker compose exec web python -c "import redis; print(redis.Redis(host='redis').ping())"
-
-# Check the nginx config for syntax errors
-docker compose exec nginx nginx -t
-
-# Find a container's IP address on the Docker network
-docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker compose ps -q)
-
 # Rebuild when something is stale
 docker compose down
 docker compose up --build
 
-# Clean slate, including volumes and orphaned containers
-docker compose down -v --remove-orphans
 ```
 <!-- TODO: change `web`, `redis` and `nginx` above if your service names differ -->
 
