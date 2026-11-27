@@ -95,8 +95,7 @@ docker build -t my-flask-app:multistage .
 <!-- SCREENSHOT: docker build output completing successfully -->
 ![Multi-stage build output](docs/screenshots/01-multistage-build.png)
 
-<!-- SCREENSHOT (optional): `docker images` showing the image size -->
-![Image size](docs/screenshots/02-image-size.png)
+
 
 ### Task 2: Flask app connected to MySQL
 
